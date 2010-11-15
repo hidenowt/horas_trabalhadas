@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   before_filter :login_required
+  before_filter :setup_current_user
   helper :all # include all helpers, all the time
 
   # See ActionController::RequestForgeryProtection for details
@@ -15,12 +16,20 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
   
   private
-  def authorized?
-    session[:user_id] || controller_name = "sessions"
+  
+  def setup_current_user
+    if session[:user_id]
+      @current_user = User.find session[:user_id]
+    end
+    true
   end
   
   def login_required
     authorized? || access_denied
+  end
+  
+  def authorized?
+    session[:user_id] || controller_name == "sessions"
   end
   
   def access_denied
