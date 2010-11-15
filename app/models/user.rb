@@ -1,4 +1,11 @@
 class User < ActiveRecord::Base
+  
+  # relacionamentos
+  has_many :project_memberships, :conditions => "leaved is null"
+  has_many :time_logs
+  has_many :projects, :through => :project_memberships
+  
+  # validacoes
   validates_presence_of :login, :password, :name, :email, :message => 'é necessário'
   validates_length_of :login, :in => 5..100, :message => 'so pode ter entre 5 e 100 caracteres'
   validates_length_of :password, :in => 5..50, :message => 'so pode ter entre 5 e 50 caracteres'
