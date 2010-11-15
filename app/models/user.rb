@@ -13,4 +13,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :login, :message => 'o campo login deve ser único'
   validates_uniqueness_of :email, :message => 'o campo email deve ser único'
   
+  # metodos
+  def self.logon(username_or_email, password)
+    user = User.first :conditions => ["(login = ? or email = ?) and password = ?", 
+                                      username_or_email, username_or_email, password]
+    user
+  end
 end
